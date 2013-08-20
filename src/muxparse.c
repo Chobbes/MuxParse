@@ -33,6 +33,7 @@
   IN_STATE: Parsing the input pin field.
   OUT_STATE: Parsing the output pin field.
   CHANNEL_STATE: Parsing the channel field.
+  END_STATE: Done finding ints - need to find ending semi-colon.
 
 */
 
@@ -40,6 +41,7 @@ typedef enum {
     IN_STATE,
     OUT_STATE,
     CHANNEL_STATE,
+    END_STATE
 } pipe_state_t;
 
 
@@ -66,10 +68,30 @@ static int is_comment(char c)
 }
 
 
-/* Returns 1 for the newline character '\n', and 0 otherwise *\
+/* Returns 1 for the delimiter character ';', and 0 otherwise */
+static int is_delimiter(char c)
+{
+    return ';' == c;
+}
+
+
+/* Returns 1 for the newline character '\n', and 0 otherwise */
 static int is_newline(char c)
 {
     return '\n' == c;
+}
+
+
+/* Returns -1 if it is not a valid digit, ['0'-'9'] */
+static int char_digit_value(char c)
+{
+    int value = c - '0';
+
+    if (value < 0 || value > 9) {
+	return -1;
+    }
+
+    return value;
 }
 
 
@@ -86,6 +108,7 @@ static void skip_line(FILE *mux_file)
 	character = fgetc(mux_file);
     }
 }
+
 
 /*
   Function to seek (moves the file position indicator of mux_file)
@@ -113,8 +136,48 @@ static void skip_aesthetics(FILE *mux_file)
     ungetc(character, mux_file);
 }
 
+static int parse_integer(FILE *mux_file, int *err)
+{
+    if (NULL === err) {
+	int tmp_err;
+	err = &tmp_err;
+    }
+
+    int character = fgetc(mux_file);
+    int digit_value = char_digit_value(character);
+    int total_value = 0;
+
+    while (-1 != digit_value) {
+	total_value *= 10;
+	total_value += digit_value;
+
+	character = fgetc(mux_file);
+	digit_value = char_digit_value(character);
+    }
+
+    if (is_whitespace(character)) {
+	*err = 0;
+    }
+    else if (is_delimiter(character)) {
+	*err = 0;
+	ungetc(character, mux_file);
+    }
+    else if (EOF == character) {
+	*err = 0;
+    }
+
+    return total_value;
+}
 
 int mux_parse_pipe(FILE *mux_file, MuxPipe *pipe)
 {
-    
+    pipe_status_t parse_state = IN_STATE;
+
+    /* First let's skip past all of the whitespace / comments */
+    skip_aesthetics(mux_file);
+
+    switch (parse_state) {
+    case IN_STATE:
+	
+    }
 }
