@@ -1,0 +1,41 @@
+#+TITLE: MuxParse Notes
+#+AUTHOR: Calvin Beck
+#+OPTIONS: ^:{}
+
+* Overview
+  This is a library / file specification for Arduino networking
+  hubs. It's designed to be used with the MuxDuino library, which is
+  used to turn an Arduino into a little networking hub by redirecting
+  various pins (it sends the inputs from one pin to another pin).
+
+  We will call the files that we are parsing ".mux" files and the
+  specification is pretty simple. This library will allow you to fetch
+  each of the MuxDuino pipes in the file one by one. This parser may
+  be adapted to work with Arduinos and SD cards if you just want to
+  put the ".mux" file on an SD card or something, however this
+  currently uses the unix file handling stuff in stdio.h.
+
+  This library will be used to actually generate an Arduino program
+  which uses the MuxDuino library given a certain network topology in
+  a ".mux" file. This is useful if you don't want to waste your
+  precious Arduino pins on an SD card reader, but still want to have
+  configureable networks!
+
+* File Description
+  The ".mux" files consist of a sequence of entries. Each entry
+  represents a single MuxPipe from the MuxDuino library. Each entry
+  consists of three integers. The first integer is the *in_pin*, the
+  second is the *out_pin*, and the third is the *channel*. Each of
+  these integers must be separated by some kind of whitespace. At the
+  end of each entry there must be a semi-colon.
+
+  In addition to that we also support line comments which start with
+  the '#' character. After '#' is spotted the rest of the line is
+  ignored by the parser. This allows you to label different pieces of
+  your network so it's easier to understand later. Here is an example
+  of how this might work:
+
+  #+BEGIN_EXAMPLE
+    # An input on pin 12 is written to the output pin 13 on channel 0.
+    12 13 0;
+  #+END_EXAMPLE
