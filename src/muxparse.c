@@ -136,6 +136,7 @@ static void skip_aesthetics(FILE *mux_file)
     ungetc(character, mux_file);
 }
 
+
 static int parse_integer(FILE *mux_file, int *err)
 {
     if (NULL === err) {
@@ -169,15 +170,48 @@ static int parse_integer(FILE *mux_file, int *err)
     return total_value;
 }
 
+
 int mux_parse_pipe(FILE *mux_file, MuxPipe *pipe)
 {
     pipe_status_t parse_state = IN_STATE;
+    MuxPipe temp_pipe;
+    int error;
 
     /* First let's skip past all of the whitespace / comments */
     skip_aesthetics(mux_file);
 
-    switch (parse_state) {
-    case IN_STATE:
-	
+    /* Check if we ran out of file! */
+    if (feof(mux_file)) {
+	return 1;
     }
+
+    /* Read input integer */
+    temp_pipe.in_pin = parse_integer(mux_file, &error);
+
+    if (error) {
+	return 2;
+    }
+
+    /* Skip more whitespace / comments */
+    skip_aesthetics(mux_file);
+
+    /* Read the output integer */
+    temp_pipe.out_pin = parse_integer(mux_file, &error);
+
+    if (error) {
+	return 2;
+    }
+
+    /* Skip to the channel integer */
+    skip_aesthetics(mux_file);
+
+    /* Read the channel integer */
+    temp_pipe.channel = parse_integer(mux_file, &error);
+
+    if (error) {
+	return 2;
+    }
+
+    *pipe = temp_pipe;
+    return 0;
 }
