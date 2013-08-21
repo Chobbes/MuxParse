@@ -23,7 +23,7 @@
 
 # You may need to change the includes to suit your needs.
 CFLAGS += -I ~/arduino-ua/libraries-osx/muxduino -I ../src/
-LDFLAGS = -lmuxparse
+LDFLAGS = -L ../src -lmuxparse
 
 readmux : readmux.o
 
