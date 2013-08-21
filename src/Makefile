@@ -20,12 +20,14 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
+# You may need to change the includes to suit your needs.
 CFLAGS += -I ~/arduino-ua/libraries-osx/muxduino
 
 libmuxparse.a : muxparse.o
 	ar -cvq libmuxparse.a muxparse.o
 
-%.o : %.c
+%.o : %.c %.h
 	$(CC) -c $< $(CFLAGS)
 
 clean:
