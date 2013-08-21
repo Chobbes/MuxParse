@@ -139,7 +139,7 @@ static void skip_aesthetics(FILE *mux_file)
 
 static int parse_integer(FILE *mux_file, int *err)
 {
-    if (NULL === err) {
+    if (NULL == err) {
 	int tmp_err;
 	err = &tmp_err;
     }
