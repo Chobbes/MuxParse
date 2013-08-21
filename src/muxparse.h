@@ -35,8 +35,9 @@
 
       pipe: Pointer to a pipe structure to store results in.
 
-  Returns 0 on success, 1 when the end of the file has been reached,
-  and 2 if there was a parse error.
+  Returns 0 on success, 1 when the end of the file has been reached
+  (and thus no more pipes to read at all) and 2 if there was a parse
+  error.
 
   Note that the mux_file should have just been opened before calling
   this the first time without manipulating the file position
