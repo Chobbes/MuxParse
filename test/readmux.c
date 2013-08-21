@@ -50,6 +50,12 @@ int main(int argc, char *argv[])
     }
 
     FILE *mux_file = fopen(argv[1], "r");
+
+    if (NULL == mux_file) {
+	fprintf(stderr, "Could not read file: %s\n", argv[1]);
+	return 2;
+    }
+
     MuxPipe pipe;
 
     int result = mux_parse_pipe(mux_file, &pipe);
