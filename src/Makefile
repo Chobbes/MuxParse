@@ -27,3 +27,9 @@ libmuxparse.a : muxparse.o
 
 %.o : %.c
 	$(CC) -c $< $(CFLAGS)
+
+clean:
+	$(RM) libmuxparse.a
+	$(RM) muxparse.o
+
+.PHONY: clean
