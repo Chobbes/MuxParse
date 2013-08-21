@@ -34,6 +34,13 @@ void usage(char *prog_name)
 }
 
 
+/*
+  This is a simple little example program that uses the MuxParse
+  library to print a ".mux" file in a somewhat "human readable"
+  format.
+
+ */
+
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
