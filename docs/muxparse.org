@@ -39,3 +39,25 @@
     # An input on pin 12 is written to the output pin 13 on channel 0.
     12 13 0;
   #+END_EXAMPLE
+
+* Interface
+  There is only one function exposed by the MuxParse library.
+
+  #+BEGIN_SRC c
+    int mux_parse_pipe(FILE *mux_file, MuxPipe *pipe);
+  #+END_SRC
+
+  This function takes as arguments a file pointer (for the ".mux" file
+  you want to parse), and a pointer to a MuxPipe structure where the
+  results are to be stored.
+
+  A return value of 0 means that the function has returned succesfully
+  and there is a new set of values stored in the location pointed to
+  by *pipe*. If this returns 1 then that just means the end of the
+  file has been reached, and no new pipes have been found. However, if
+  2 is returned it means that some parsing error was encountered.
+
+  In order to parse a file *mux_parse_pipe()* must be called over and
+  over, reading in a single pipe at a time until it returns a value
+  of 1. Each time a pipe is retrieved it may be registered MuxDuino,
+  printed for information, or whatever.
