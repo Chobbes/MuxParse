@@ -173,7 +173,7 @@ static int parse_integer(FILE *mux_file, int *err)
 
 int mux_parse_pipe(FILE *mux_file, MuxPipe *pipe)
 {
-    pipe_status_t parse_state = IN_STATE;
+    pipe_state_t parse_state = IN_STATE;
     MuxPipe temp_pipe;
     int error;
 
