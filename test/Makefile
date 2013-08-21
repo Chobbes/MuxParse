@@ -26,9 +26,10 @@ CFLAGS += -I ~/arduino-ua/libraries-osx/muxduino -I ../src/
 LDFLAGS = -L ../src -lmuxparse
 
 readmux : readmux.o
+	$(CC) $< $(LDFLAGS) -o $@
 
 %.o : %.c
-	$(CC) -c $< $(CFLAGS) $(LDFLAGS)
+	$(CC) -c $< $(CFLAGS)
 
 clean:
 	$(RM) readmux
