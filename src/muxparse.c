@@ -101,7 +101,7 @@ static void skip_line(FILE *mux_file)
     int character = fgetc(mux_file);
 
     while (!is_newline(character)) {
-	if (EOF == character) {
+	if (feof(mux_file)) {
 	    return;
 	}
 
@@ -124,6 +124,8 @@ static void skip_aesthetics(FILE *mux_file)
     while (is_whitespace(character) || is_comment(character)) {
 	if (is_comment(character)) {
 	    skip_line(mux_file);
+	    skip_aesthetics(mux_file);
+	    return;
 	}
 	else if (EOF == character) {
 	    return;
@@ -132,8 +134,10 @@ static void skip_aesthetics(FILE *mux_file)
 	character = fgetc(mux_file);
     }
 
-    /* Put the non-whitespace / comment character back */
-    ungetc(character, mux_file);
+    if (!feof(mux_file)) {
+	/* Put the non-whitespace / comment character back */
+	ungetc(character, mux_file);
+    }
 }
 
 
@@ -209,6 +213,14 @@ int mux_parse_pipe(FILE *mux_file, MuxPipe *pipe)
     temp_pipe.channel = parse_integer(mux_file, &error);
 
     if (error) {
+	return 2;
+    }
+
+    /* Now find the delimiter */
+    skip_aesthetics(mux_file);
+    int character = fgetc(mux_file);
+
+    if (!is_delimiter(character)) {
 	return 2;
     }
 
