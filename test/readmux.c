@@ -73,5 +73,6 @@ int main(int argc, char *argv[])
 	return 2;
     }
 
+    fclose(mux_file);
     return 0;
 }
