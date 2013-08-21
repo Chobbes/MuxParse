@@ -23,7 +23,7 @@
 */
 
 #include <stdio.h>
-#include <muxpipe.h>
+#include <mux_pipe.h>
 #include <muxparse.h>
 
 
@@ -52,14 +52,14 @@ int main(int argc, char *argv[])
     FILE *mux_file = fopen(argv[1], "r");
     MuxPipe pipe;
 
-    int result = mux_pipe_parse(mux_file, &pipe);
+    int result = mux_parse_pipe(mux_file, &pipe);
 
     while (0 == result) {
 	printf("Input %d ", pipe.in_pin);
 	printf("to output %d ", pipe.out_pin);
 	printf("on channel %d!\n", pipe.channel);
 
-	result = mux_pipe_parse(mux_file, &pipe);
+	result = mux_parse_pipe(mux_file, &pipe);
     }
 
     if (2 == result) {
