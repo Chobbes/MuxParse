@@ -31,6 +31,7 @@ readmux : readmux.o
 	$(CC) -c $< $(CFLAGS) $(LDFLAGS)
 
 clean:
+	$(RM) readmux
 	$(RM) readmux.o
 
 .PHONY: clean
